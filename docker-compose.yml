@@ -1,0 +1,63 @@
+services:
+  app:
+    build: .
+    container_name: basic-inventory-app
+    working_dir: /app
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      - DB_NAME=inventory_db
+      - DB_HOST=db
+      - DB_PORT=5432
+      - GODEBUG=netdns=go
+    ports:
+      - "8080:8080"
+    networks:
+      - inventory-network
+
+  db:
+    image: postgres:18-alpine
+    container_name: basic-inventory-db
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=inventory_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d inventory_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - inventory-network
+
+  admin:
+    image: adminer
+    container_name: basic-inventory-adminer
+    restart: unless-stopped
+    environment:
+      ADMINER_DESIGN : "flat"
+    ports:
+      - "8888:8080"
+    depends_on:
+      - db
+    networks:
+      - inventory-network
+
+networks:
+  inventory-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
