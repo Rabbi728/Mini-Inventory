@@ -1,7 +1,8 @@
 package user
 
 import (
-	"basic-inventory-app/utils"
+	"mini-inventory/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

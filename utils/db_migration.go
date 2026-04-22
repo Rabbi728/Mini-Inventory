@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"basic-inventory-app/config"
 	"fmt"
 	"log"
+	"mini-inventory/config"
 	"os"
 	"path/filepath"
 	"sort"

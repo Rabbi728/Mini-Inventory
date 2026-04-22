@@ -1,9 +1,10 @@
 package auth
 
 import (
-	"basic-inventory-app/utils"
-	"github.com/gin-gonic/gin"
+	"mini-inventory/utils"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -30,7 +31,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Set user and token in context
 		c.Set("user", user)
 		c.Set("token", token)
 		c.Next()

@@ -6,13 +6,11 @@ import (
 	"strings"
 )
 
-// ValidationError holds the field and the message
 type ValidationError struct {
 	Field   string `json:"field"`
 	Message string `json:"message"`
 }
 
-// FormatValidationErrors converts validator.ValidationErrors into a slice of ValidationError
 func FormatValidationErrors(err error) []ValidationError {
 	var errors []ValidationError
 
@@ -33,7 +31,6 @@ func FormatValidationErrors(err error) []ValidationError {
 	return errors
 }
 
-// getErrorMessage handles the template mapping for validation tags
 func getErrorMessage(f validator.FieldError) string {
 	switch f.Tag() {
 	case "required":
@@ -51,7 +48,6 @@ func getErrorMessage(f validator.FieldError) string {
 	}
 }
 
-// Response handles a unified API response structure
 type Response struct {
 	Status  bool        `json:"status"`
 	Message string      `json:"message"`
@@ -59,7 +55,6 @@ type Response struct {
 	Errors  interface{} `json:"errors,omitempty"`
 }
 
-// ErrorResponse unified error response
 func ErrorResponse(message string, errors interface{}) Response {
 	return Response{
 		Status:  false,
@@ -68,7 +63,6 @@ func ErrorResponse(message string, errors interface{}) Response {
 	}
 }
 
-// SuccessResponse unified success response
 func SuccessResponse(message string, data interface{}) Response {
 	return Response{
 		Status:  true,

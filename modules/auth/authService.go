@@ -1,12 +1,12 @@
 package auth
 
 import (
-	"basic-inventory-app/config"
-	"basic-inventory-app/modules/user"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"mini-inventory/config"
+	"mini-inventory/modules/user"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -50,7 +50,7 @@ func (s *AuthService) Login(email, password string) (string, error) {
 	token := hex.EncodeToString(tokenBytes)
 
 	hashedToken := hashToken(token)
-	expiresAt := time.Now().Add(24 * time.Hour)
+	expiresAt := time.Now().Add(7 * 24 * time.Hour)
 	tokenQuery := `INSERT INTO personal_access_tokens (user_id, token, expires_at, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)`
 	_, err = config.DB.Exec(tokenQuery, u.ID, hashedToken, expiresAt, time.Now(), time.Now())
 	if err != nil {

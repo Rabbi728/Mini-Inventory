@@ -1,8 +1,9 @@
 package auth
 
 import (
-	"basic-inventory-app/modules/user"
-	"basic-inventory-app/utils"
+	"mini-inventory/modules/user"
+	"mini-inventory/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "c295aeb7-ef87-4ffd-8d79-9ca79d7e6595",
+		"name": "Mini Inventory",
+		"description": "Full API collection for Mini Inventory Go (Gin + PostgreSQL) project. Base URL: http://localhost:8080/api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41525610"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": ["{{base_url}}"],
+							"path": ["register"]
+						},
+						"description": "Register a new user. Returns the created user object."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.data && json.data.token) {",
+									"    pm.collectionVariables.set('token', json.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						},
+						"description": "Login with email and password. Token is automatically saved to collection variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": ["{{base_url}}"],
+							"path": ["logout"]
+						},
+						"description": "Logout the current user. Requires Bearer token."
+					},
+					"response": []
+				},
+				{
+					"name": "Me (Current User)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/me",
+							"host": ["{{base_url}}"],
+							"path": ["me"]
+						},
+						"description": "Get currently authenticated user info."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/",
+							"host": ["{{base_url}}"],
+							"path": ["users", ""]
+						},
+						"description": "Retrieve all users. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/",
+							"host": ["{{base_url}}"],
+							"path": ["users", ""]
+						},
+						"description": "Create a new user. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Get a single user by their ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"johnupdated@example.com\",\n  \"password\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Update an existing user by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						},
+						"description": "Delete a user by ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/",
+							"host": ["{{base_url}}"],
+							"path": ["products", ""]
+						},
+						"description": "Retrieve all products."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"T-Shirt\",\n  \"description\": \"Cotton T-Shirt\",\n  \"color\": \"Red\",\n  \"size\": \"M\",\n  \"uom\": \"pcs\",\n  \"product_code\": \"TSH-001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/",
+							"host": ["{{base_url}}"],
+							"path": ["products", ""]
+						},
+						"description": "Create a new product. Required fields: title, uom, product_code."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/1",
+							"host": ["{{base_url}}"],
+							"path": ["products", "1"]
+						},
+						"description": "Get a single product by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"T-Shirt Updated\",\n  \"description\": \"Premium Cotton T-Shirt\",\n  \"color\": \"Blue\",\n  \"size\": \"L\",\n  \"uom\": \"pcs\",\n  \"product_code\": \"TSH-001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/1",
+							"host": ["{{base_url}}"],
+							"path": ["products", "1"]
+						},
+						"description": "Update an existing product by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/1",
+							"host": ["{{base_url}}"],
+							"path": ["products", "1"]
+						},
+						"description": "Delete a product by ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "Get All Locations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/locations/",
+							"host": ["{{base_url}}"],
+							"path": ["locations", ""]
+						},
+						"description": "Retrieve all locations."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Warehouse A\",\n  \"description\": \"Main storage warehouse\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/locations/",
+							"host": ["{{base_url}}"],
+							"path": ["locations", ""]
+						},
+						"description": "Create a new location. Required field: title."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Location by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/locations/1",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "1"]
+						},
+						"description": "Get a single location by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Location",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Warehouse A - Updated\",\n  \"description\": \"Updated main storage warehouse\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/locations/1",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "1"]
+						},
+						"description": "Update an existing location by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Location",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/locations/1",
+							"host": ["{{base_url}}"],
+							"path": ["locations", "1"]
+						},
+						"description": "Delete a location by ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Receive Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": 1,\n  \"location_id\": 1,\n  \"items\": 100,\n  \"note\": \"Initial stock received from supplier\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventories/receive",
+							"host": ["{{base_url}}"],
+							"path": ["inventories", "receive"]
+						},
+						"description": "Receive (add) stock for a product at a specific location. Required fields: product_id, location_id, items."
+					},
+					"response": []
+				},
+				{
+					"name": "Deliver Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": 1,\n  \"location_id\": 1,\n  \"items\": 10,\n  \"note\": \"Delivered to customer order #123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/inventories/delivery",
+							"host": ["{{base_url}}"],
+							"path": ["inventories", "delivery"]
+						},
+						"description": "Deliver (deduct) stock of a product from a specific location. Required fields: product_id, location_id, items."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Stock Register",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/stock-register?product_id=1&start_date=2026-01-01&end_date=2026-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reports",
+								"stock-register"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"description": "Optional product ID filter"
+								},
+								{
+									"key": "start_date",
+									"value": "2026-01-01",
+									"description": "Optional start date filter (YYYY-MM-DD)"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-12-31",
+									"description": "Optional end date filter (YYYY-MM-DD)"
+								}
+							]
+						},
+						"description": "Get stock register report with opening, in, out and balance."
+					},
+					"response": []
+				},
+				{
+					"name": "Receive Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/receive?product_id=1&start_date=2026-01-01&end_date=2026-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reports",
+								"receive"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								},
+								{
+									"key": "start_date",
+									"value": "2026-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delivery Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/delivery?product_id=1&start_date=2026-01-01&end_date=2026-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reports",
+								"delivery"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								},
+								{
+									"key": "start_date",
+									"value": "2026-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2026-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

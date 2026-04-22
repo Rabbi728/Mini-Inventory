@@ -8,9 +8,4 @@ RUN go install github.com/air-verse/air@latest
 
 COPY . .
 
-RUN [ -f main.go ] && \
-    [ ! -f go.mod ] && go mod init basic-inventory-app
-
-RUN go mod tidy
-
 CMD ["air"]
